@@ -69,6 +69,8 @@ export const en: Dictionary = {
     eyebrow: "Features",
     heading: "Why Aura",
     mockNote: "Switch anytime below the input box",
+    testNote: "✓ Core, UI and permission paths covered",
+    editResult: "written · cargo check passed",
     items: [],
     rows: [
       {
@@ -81,12 +83,12 @@ export const en: Dictionary = {
         ],
       },
       {
-        title: "Three modes, permissions enforced",
-        desc: "Chat is read-only, Plan produces a task list, and only Build may edit files or run commands — out-of-scope calls are double-checked by the program, never by prompt discipline.",
+        title: "Real files, real builds",
+        desc: "Pick a directory as the workspace and every read and write touches real files. Edit, build, read the error and fix it again — all in one window.",
         bullets: [
-          "Tool calls validated before and after",
-          "Plan mode outputs a structured task list",
-          "Every action stays visible in the flow",
+          "You choose the workspace and its scope",
+          "Edit code, build, read the error, iterate",
+          "Every change stays in the conversation",
         ],
       },
       {
@@ -149,6 +151,8 @@ export const en: Dictionary = {
     eyebrow: "Transparency",
     heading: "Every action stays in the conversation",
     desc: "Reasoning and tool calls appear as plain text in the flow — which files were opened, what was changed, all in the open.",
+    expand: "Expand output",
+    collapse: "Collapse output",
     userMessagePrefix: "Please",
   },
   footer: {
@@ -162,7 +166,6 @@ export const en: Dictionary = {
     github: "GitHub",
     releases: "Releases",
     readme: "README",
-    about: "About",
     license: "Apache 2.0 License",
     note: "Documentation is maintained in Chinese",
   },

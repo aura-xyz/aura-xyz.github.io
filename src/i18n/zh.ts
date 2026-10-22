@@ -67,6 +67,8 @@ export const zh = {
     eyebrow: "产品特性",
     heading: "为什么选 Aura",
     mockNote: "输入框下方随时切换",
+    testNote: "✓ 核心、UI、权限路径全覆盖",
+    editResult: "已写入 · cargo check 通过",
     items: [], // 已改用 rows 分屏展示
     rows: [
       {
@@ -79,12 +81,12 @@ export const zh = {
         ],
       },
       {
-        title: "三档模式，权限硬隔离",
-        desc: "Chat 只读、Plan 出计划、Build 才能改文件跑命令——越权调用由程序在调用前后双重校验，不靠提示词自觉。",
+        title: "在真实工作区里动手",
+        desc: "选定一个目录作为工作区，读写的就是真实文件；改完直接跑构建、看报错再改，闭环在同一个窗口里。",
         bullets: [
-          "工具调用前后双重校验",
-          "Plan 模式输出结构化任务清单",
-          "每一步动作都留在对话流里",
+          "工作区由你选定，作用域清晰",
+          "改代码、跑构建、看报错再改",
+          "每条改动都留在对话流里",
         ],
       },
       {
@@ -143,6 +145,8 @@ export const zh = {
     eyebrow: "思考过程",
     heading: "每一步动作都在对话流里",
     desc: "推理与工具调用以纯文本形式平铺展示，点什么文件、改了哪里一目了然。",
+    expand: "展开输出",
+    collapse: "收起输出",
     userMessagePrefix: "帮我",
   },
   footer: {
@@ -155,7 +159,6 @@ export const zh = {
     github: "GitHub",
     releases: "Releases",
     readme: "README",
-    about: "关于",
     license: "Apache 2.0 许可",
     note: "文档目前以中文维护",
   },

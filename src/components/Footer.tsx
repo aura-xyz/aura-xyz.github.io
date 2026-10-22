@@ -10,7 +10,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-line">
       <div className="mx-auto w-full max-w-6xl px-6 py-14">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr]">
           <div>
             <div className="flex items-center gap-2.5">
               <img src="/logo.png" alt="" className="h-6 w-6" />
@@ -77,12 +77,6 @@ export default function Footer() {
                   {t.footer.readme}
                 </a>
               </li>
-            </ul>
-          </nav>
-
-          <nav aria-label={t.footer.about}>
-            <p className="eyebrow mb-3">{t.footer.about}</p>
-            <ul className="space-y-2.5">
               <li>
                 <a
                   href={`${REPO_URL}/blob/main/LICENSE`}

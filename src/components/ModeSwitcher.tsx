@@ -42,7 +42,7 @@ export default function ModeSwitcher() {
         role="tablist"
         aria-label={lang === "zh" ? "会话模式" : "Session modes"}
         onKeyDown={onTablistKeyDown}
-        className="mx-auto mb-10 inline-flex items-center gap-0.5 rounded-full border border-line bg-surface p-0.5"
+        className="mx-auto mb-10 flex w-fit items-center gap-0.5 rounded-full border border-line bg-surface p-0.5"
       >
         {MODES.map((m, i) => {
           const active = m === mode;
@@ -100,7 +100,9 @@ export default function ModeSwitcher() {
               {/* 避开 dl 的 dt/dd 次序约束：直接用 div + span，符号配文字标签 */}
               <span
                 aria-hidden="true"
-                className={`text-xl font-semibold ${ok ? "text-success" : "text-subtle opacity-60"}`}
+                className={`text-xl font-semibold transition-colors duration-300 ${
+                  ok ? "text-success" : "text-subtle opacity-60"
+                }`}
               >
                 {ok ? "✓" : "—"}
               </span>

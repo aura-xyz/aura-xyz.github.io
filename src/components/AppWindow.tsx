@@ -37,6 +37,7 @@ export default function AppWindow() {
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const modelRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const didMount = useRef(false);
 
   useEffect(() => {
     if (!modelOpen) return;
@@ -55,6 +56,11 @@ export default function AppWindow() {
   }, [modelOpen]);
 
   useEffect(() => {
+    // 首帧不要滚动：只有用户主动发送新消息后才跟到最新一条
+    if (!didMount.current) {
+      didMount.current = true;
+      return;
+    }
     const el = scrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [sent]);
@@ -84,7 +90,28 @@ export default function AppWindow() {
   ];
 
   return (
-    <div className="overflow-hidden rounded-card border border-line text-left shadow-lg transition-shadow hover:shadow-xl">
+    <div className="overflow-hidden rounded-card border border-line text-left shadow-xl transition-shadow hover:shadow-2xl">
+      {/* ---- 标题栏（复刻主应用 TitleBar；版本号与主应用发布同步） ---- */}
+      <div className="flex h-9 shrink-0 select-none items-center justify-between border-b border-line bg-surface pl-4">
+        <div className="flex items-baseline gap-2">
+          <span className="text-[13px] font-semibold tracking-[-0.02em] text-foreground">
+            Aura
+          </span>
+          <span className="font-mono text-[11px] text-subtle">v0.5.2</span>
+        </div>
+        <div aria-hidden="true" className="flex h-full">
+          <span className="flex h-full w-11 items-center justify-center text-subtle transition-colors hover:bg-bubble hover:text-foreground">
+            <Icon d={PATHS.minus} size={14} />
+          </span>
+          <span className="flex h-full w-11 items-center justify-center text-subtle transition-colors hover:bg-bubble hover:text-foreground">
+            <Icon d="M6 6h12v12H6z" size={11} />
+          </span>
+          <span className="flex h-full w-11 items-center justify-center text-subtle transition-colors hover:bg-danger hover:text-white">
+            <Icon d={PATHS.x} size={14} />
+          </span>
+        </div>
+      </div>
+
       <div className="flex h-[520px] bg-surface">
         {/* ---- 侧栏（复刻 Sidebar，可折叠） ---- */}
         <aside
@@ -347,7 +374,7 @@ export default function AppWindow() {
               </div>
 
               <div className="mt-2 flex items-center justify-between gap-3">
-                <div className="flex min-w-0 items-center gap-2">
+                <div className="flex min-w-0 flex-wrap items-center gap-2">
                   <div
                     role="tablist"
                     aria-label={ui.modeAria}
@@ -411,7 +438,7 @@ export default function AppWindow() {
                       <div
                         role="listbox"
                         aria-label={ui.modelAria}
-                        className="absolute bottom-full left-0 z-10 mb-1.5 w-52 rounded-card border border-line bg-surface p-1.5 shadow-lg"
+                        className="absolute bottom-full right-0 z-10 mb-1.5 w-52 rounded-card border border-line bg-surface p-1.5 shadow-lg"
                       >
                         {ui.models.map((g, gi) => (
                           <div

@@ -24,7 +24,7 @@ function InlineText({ text }: { text: string }) {
 
 /** 动作行样式复刻主应用 ActionRow：等宽小字、chevron、detail 折叠块 */
 function DemoAction({ block }: { block: DemoBlock }) {
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   const detail = block.detail;
   const [open, setOpen] = useState(false);
 
@@ -36,7 +36,7 @@ function DemoAction({ block }: { block: DemoBlock }) {
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
-            aria-label={open ? "收起输出 / Collapse" : "展开输出 / Expand"}
+            aria-label={open ? t.demo.collapse : t.demo.expand}
             className="mt-1 shrink-0 text-subtle transition-transform hover:text-foreground"
           >
             <svg

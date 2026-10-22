@@ -14,7 +14,7 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0 -z-10"
       >
         <div className="bg-grid absolute inset-0 opacity-50 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black_20%,transparent_75%)]" />
-        <div className="hero-glow absolute inset-x-0 top-0 h-[520px]" />
+        <div className="hero-glow absolute inset-x-0 top-0 h-[860px]" />
       </div>
 
       <div className="mx-auto max-w-3xl px-6 pt-16 pb-12 text-center sm:pt-24">

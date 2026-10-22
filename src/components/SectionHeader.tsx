@@ -9,7 +9,7 @@ export default function SectionHeader({ eyebrow, heading, desc }: Props) {
   return (
     <div className="mb-14 text-center">
       <p className="eyebrow mb-3">{eyebrow}</p>
-      <h2 className="font-semibold tracking-tight text-foreground text-3xl sm:text-4xl">
+      <h2 className="text-balance font-semibold tracking-tight text-foreground text-3xl sm:text-4xl">
         {heading}
       </h2>
       {desc && (

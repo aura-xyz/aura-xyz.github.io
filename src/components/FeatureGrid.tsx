@@ -15,7 +15,7 @@ import { PATHS } from "./iconPaths";
 /** 统一的「窗口片段」外框 */
 function Frame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-card border border-line bg-surface p-5 shadow-xs">
+    <div className="rounded-card border border-line bg-surface p-5 shadow-sm">
       {children}
     </div>
   );
@@ -51,67 +51,42 @@ function MockLocal() {
   );
 }
 
-/** 1 · 权限：ModeTabs 胶囊 + 权限矩阵 */
-function MockModes({ t }: { t: Dictionary }) {
-  const cols = ["Chat", "Plan", "Build"];
-  const matrix: Array<[string, boolean, boolean, boolean]> = [
-    [t.modes.columns.read, true, true, true],
-    [t.modes.columns.write, false, false, true],
-    [t.modes.columns.exec, false, false, true],
-  ];
+/** 1 · 工作区操作：可折叠的编辑工具行（复刻 ActionRow 的 Edit 形态） */
+function MockEdit({ t }: { t: Dictionary }) {
   return (
     <Frame>
-      <div className="inline-flex items-center gap-0.5 rounded-full border border-line bg-surface p-0.5">
-        {cols.map((c, i) => (
-          <span
-            key={c}
-            className={`rounded-full px-3 py-1 text-xs ${
-              i === 2 ? "bg-brand text-white" : "text-subtle"
-            }`}
-          >
-            {c}
+      <div className="font-mono text-[13px] leading-relaxed">
+        <div className="flex items-center gap-2 text-subtle">
+          <Icon d={PATHS.chevronRight} size={13} className="rotate-90" />
+          <span className="break-all">Edit src/lib/search.rs</span>
+        </div>
+        <pre className="mt-1.5 overflow-x-auto rounded-tag border border-line bg-surface-sunken px-3 py-2 text-[12px] leading-relaxed">
+          <span className="block text-danger">-  let hit = find(q);</span>
+          <span className="block text-success">
+            +  let hit = find(q).map(Span::from);
           </span>
-        ))}
-      </div>
-      <div className="mt-4 space-y-1.5">
-        {matrix.map(([label, ...ok]) => (
-          <div
-            key={label}
-            className="grid grid-cols-[1fr_auto] items-center gap-x-6 sm:grid-cols-[1fr_auto_auto_auto]"
-          >
-            <span className="text-sm text-foreground">{label}</span>
-            {ok.map((v, i) => (
-              <span key={i} className="w-10 text-center">
-                {v ? (
-                  <Icon
-                    d={PATHS.check}
-                    size={13}
-                    className="mx-auto text-success"
-                  />
-                ) : (
-                  <span className="text-sm text-subtle opacity-60">—</span>
-                )}
-              </span>
-            ))}
-          </div>
-        ))}
+        </pre>
+        <div className="mt-3 flex items-center gap-2 border-t border-line pt-3 text-xs text-subtle">
+          <Icon d={PATHS.check} size={13} className="text-success" />
+          {t.features.editResult}
+        </div>
       </div>
     </Frame>
   );
 }
 
 /** 2 · Rust：终端卡片 */
-function MockRust() {
+function MockRust({ t }: { t: Dictionary }) {
   const lines: Array<{ text: string; tone: "cmd" | "ok" | "plain" }> = [
     { text: "$ cargo test", tone: "cmd" },
     { text: "test result: ok. 249 passed; 0 failed", tone: "plain" },
     { text: "$ pnpm test", tone: "cmd" },
     { text: "110 tests passed", tone: "plain" },
-    { text: "✓ 核心、UI、权限路径全覆盖", tone: "ok" },
+    { text: t.features.testNote, tone: "ok" },
   ];
   return (
     <Frame>
-      <pre className="font-mono text-[13px] leading-loose text-subtle">
+      <pre className="overflow-x-auto font-mono text-[13px] leading-loose text-subtle">
         {lines.map((l, i) => (
           <div key={i}>
             {l.tone === "ok" ? (
@@ -129,7 +104,7 @@ function MockRust() {
 /** 3 · 多模型：模型下拉片段（可交互，点击开合） */
 function MockModels({ t }: { t: Dictionary }) {
   const ui = t.screenshot.ui;
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [model, setModel] = useState(ui.models[0].list[0]);
 
   return (
@@ -195,8 +170,8 @@ function MockModels({ t }: { t: Dictionary }) {
 
 const MOCKS: Array<(t: Dictionary) => React.ReactNode> = [
   () => <MockLocal />,
-  (t) => <MockModes t={t} />,
-  () => <MockRust />,
+  (t) => <MockEdit t={t} />,
+  (t) => <MockRust t={t} />,
   (t) => <MockModels t={t} />,
 ];
 
