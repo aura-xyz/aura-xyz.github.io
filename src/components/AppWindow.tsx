@@ -1,252 +1,296 @@
+import { useEffect, useRef, useState } from "react";
 import { useI18n } from "../i18n/context";
+import Icon from "./Icon";
+import { PATHS } from "./iconPaths";
 
 /**
- * 用代码 1:1 复刻主应用主界面（替代真实截图素材）。
+ * 用代码 1:1 复刻主应用主界面，并且可真实操作：
+ * 侧栏折叠、工作区展开、会话切换、模式切换、模型下拉、输入与发送。
  *
- * 结构与样式对齐 app/src/components/ 下的 TitleBar / Sidebar /
- * MessageList / UserBubble / ActionRow / InputArea / ModeTabs 落地实现，
- * 语义令牌取 website index.css（与主应用同步），亮暗主题自动跟随。
- * 纯展示组件：不注册交互，整体以 role="img" + aria-label 对外描述。
+ * 结构与交互对齐 app/src/components/ 的落地实现（TitleBar / Sidebar /
+ * MessageList / ActionRow / InputArea / ModeTabs / ModelSelect）。
+ * 主题与语言全部跟随官网自身状态。
  */
 
-/** lucide 风格手写路径（24 viewBox，1.75 线宽），避免为几个图标引依赖 */
-const PATHS = {
-  minus: "M5 12h14",
-  x: ["M18 6L6 18", "M6 6l12 12"],
-  chevronRight: "M9 18l6-6-6-6",
-  chevronUp: "M18 15l-6-6-6 6",
-  folder:
-    "M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z",
-  arrowUp: ["M12 19V5", "M5 12l7-7 7 7"],
-  plusSquare: [
-    "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
-    "M12 7v6",
-    "M9 10h6",
-  ],
-  sparkles: [
-    "M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z",
-  ],
-  plug: [
-    "M12 22v-5",
-    "M9 8V2",
-    "M15 8V2",
-    "M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8z",
-  ],
-  panelClose: [
-    "M15 4v16",
-    "m14 9-3 3 3 3",
-    "M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z",
-  ],
-  settings: [
-    "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.74v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
-    "M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0-6 0",
-  ],
-} as const;
-
-function Icon({
-  d,
-  size = 14,
-  className = "",
-}: {
-  d: string | readonly string[];
-  size?: number;
-  className?: string;
-}) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.75}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className={`shrink-0 ${className}`}
-    >
-      {(typeof d === "string" ? [d] : d).map((p, i) => (
-        <path key={i} d={p} />
-      ))}
-    </svg>
-  );
-}
-
-/** 输入区下方的胶囊 tablist（复刻 ModeTabs），静态展示 */
-const TABS = ["Chat", "Plan", "Build"] as const;
-
-function StatusBar({ active }: { active: (typeof TABS)[number] }) {
-  return (
-    <div className="inline-flex items-center gap-0.5 rounded-full border border-line bg-surface p-0.5">
-      {TABS.map((tab) => (
-        <span
-          key={tab}
-          className={`rounded-full px-2.5 py-1 text-xs ${
-            tab === active ? "bg-brand text-white" : "text-subtle"
-          }`}
-        >
-          {tab}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-/** 输入区下方的次级文字按钮（复刻 WorkspaceSelect / ModelSelect） */
-function SubButton({
-  icon,
-  children,
-}: {
-  icon?: string | readonly string[];
-  children: React.ReactNode;
-}) {
-  return (
-    <span className="flex items-center gap-1.5 py-1 text-xs text-subtle">
-      {icon && <Icon d={icon} size={13} />}
-      <span className="max-w-[180px] truncate">{children}</span>
-      {icon ? null : <Icon d={PATHS.chevronUp} size={12} />}
-    </span>
-  );
-}
+type Mode = "chat" | "plan" | "build";
+const MODES: Mode[] = ["chat", "plan", "build"];
+const MODE_LABELS = { chat: "Chat", plan: "Plan", build: "Build" } as const;
 
 export default function AppWindow() {
   const { t } = useI18n();
   const ui = t.screenshot.ui;
 
+  const [collapsed, setCollapsed] = useState(false);
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
+    [ui.wsActive]: true,
+  });
+  const [activeSession, setActiveSession] = useState<"s1" | "s2" | "s3">("s1");
+  const [mode, setMode] = useState<Mode>("plan");
+  const [model, setModel] = useState(ui.models[0].list[0]);
+  const [modelOpen, setModelOpen] = useState(false);
+  const [draft, setDraft] = useState("");
+  const [sent, setSent] = useState<Array<{ user: string; reply: string }>>([]);
+  const [openDetails, setOpenDetails] = useState<Record<number, boolean>>({
+    0: true,
+  });
+
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const modelRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!modelOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (!modelRef.current?.contains(e.target as Node)) setModelOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setModelOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [modelOpen]);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [sent]);
+
+  function send() {
+    const text = draft.trim();
+    if (!text) return;
+    setSent((prev) => [...prev, { user: text, reply: ui.demoHint }]);
+    setDraft("");
+  }
+
+  function onTablistKeyDown(e: React.KeyboardEvent) {
+    const dir = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+    if (!dir) return;
+    e.preventDefault();
+    const idx = (MODES.indexOf(mode) + dir + MODES.length) % MODES.length;
+    setMode(MODES[idx]);
+    tabRefs.current[idx]?.focus();
+  }
+
+  const toggleDetail = (i: number) =>
+    setOpenDetails((prev) => ({ ...prev, [i]: !prev[i] }));
+
+  const actionRows = [
+    { text: ui.action1, detail: ui.detail1 },
+    { text: ui.action2, detail: ui.detail2 },
+  ];
+
   return (
-    <div
-      role="img"
-      aria-label={t.screenshot.alt}
-      className="overflow-hidden rounded-card border border-line text-left shadow-lg"
-    >
-      <div className="flex h-[500px] bg-surface">
-        {/* ---- 侧栏（复刻 Sidebar 展开态） ---- */}
-        <aside className="hidden w-56 shrink-0 flex-col border-r border-line sm:flex">
+    <div className="overflow-hidden rounded-card border border-line text-left shadow-lg transition-shadow hover:shadow-xl">
+      <div className="flex h-[520px] bg-surface">
+        {/* ---- 侧栏（复刻 Sidebar，可折叠） ---- */}
+        <aside
+          className={`hidden shrink-0 flex-col overflow-hidden border-r border-line transition-[width] duration-200 sm:flex ${
+            collapsed ? "w-14" : "w-56"
+          }`}
+        >
           <header className="flex h-[49px] shrink-0 items-center gap-2 px-3">
-            <img src="/logo.png" alt="" className="h-5 w-5" />
-            <span className="text-base font-semibold tracking-[-0.02em] text-foreground">
-              Aura
-            </span>
-            <span className="ml-auto text-subtle">
-              <Icon d={PATHS.panelClose} size={14} />
-            </span>
+            <button
+              type="button"
+              onClick={() => setCollapsed(false)}
+              disabled={!collapsed}
+              aria-label={ui.expandSidebar}
+              title={ui.expandSidebar}
+              className="shrink-0 rounded-tag p-1.5 text-subtle transition-colors enabled:hover:bg-bubble enabled:hover:text-foreground disabled:pointer-events-none"
+            >
+              <img src="/logo.png" alt="" className="h-5 w-5" />
+            </button>
+            {!collapsed && (
+              <>
+                <span className="whitespace-nowrap text-base font-semibold tracking-[-0.02em] text-foreground">
+                  Aura
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setCollapsed(true)}
+                  aria-label={ui.collapseSidebar}
+                  title={ui.collapseSidebar}
+                  className="ml-auto rounded-tag p-1 text-subtle transition-colors hover:bg-bubble hover:text-foreground"
+                >
+                  <Icon d={PATHS.panelClose} size={14} />
+                </button>
+              </>
+            )}
           </header>
+
           <nav className="shrink-0 px-3">
             {[
-              { label: ui.newChat, icon: PATHS.plusSquare, active: false },
-              { label: ui.skills, icon: PATHS.sparkles, active: false },
-              { label: ui.mcp, icon: PATHS.plug, active: false },
+              { label: ui.newChat, icon: PATHS.plusSquare },
+              { label: ui.skills, icon: PATHS.sparkles },
+              { label: ui.mcp, icon: PATHS.plug },
             ].map((item) => (
-              <div
+              <button
                 key={item.label}
-                className="mt-0.5 flex items-center gap-2.5 rounded-tag px-2 py-2 text-sm text-subtle first:mt-0"
+                type="button"
+                title={collapsed ? item.label : undefined}
+                className={`mt-0.5 flex w-full items-center rounded-tag text-left text-sm text-subtle transition-colors hover:bg-bubble hover:text-foreground first:mt-0 ${
+                  collapsed ? "justify-center px-0 py-2" : "gap-2.5 px-2 py-2"
+                }`}
               >
                 <Icon d={item.icon} size={15} />
-                <span className="truncate">{item.label}</span>
-              </div>
+                {!collapsed && <span className="truncate">{item.label}</span>}
+              </button>
             ))}
           </nav>
-          <div className="min-h-0 flex-1 space-y-0.5 overflow-hidden px-3 pt-1">
-            {[
-              { ws: ui.wsActive, open: true },
-              { ws: ui.wsOther, open: false },
-            ].map((g) => (
-              <section key={g.ws}>
-                <div
-                  className={`flex items-center gap-2 rounded-tag py-1.5 pl-1 pr-2 text-sm ${
-                    g.open ? "bg-bubble" : ""
-                  }`}
-                >
-                  <span
-                    className={`text-subtle ${
-                      g.open ? "rotate-90" : ""
-                    } transition-transform`}
+
+          <div className="scrollbar-hidden min-h-0 flex-1 overflow-y-auto px-3 pt-1">
+            {collapsed ? (
+              <div className="space-y-0.5">
+                {[ui.wsActive, ui.wsOther].map((ws) => (
+                  <button
+                    key={ws}
+                    type="button"
+                    onClick={() => setOpenGroups({ ...openGroups, [ws]: true })}
+                    title={ws}
+                    aria-label={ws}
+                    className="flex w-full items-center justify-center rounded-tag py-2 transition-colors hover:bg-bubble"
                   >
-                    <Icon d={PATHS.chevronRight} size={13} />
-                  </span>
-                  <span
-                    className={`h-1.5 w-1.5 shrink-0 rounded-full ${
-                      g.open ? "bg-brand" : "bg-line"
-                    }`}
-                  />
-                  <span
-                    className={`truncate ${
-                      g.open ? "font-medium text-foreground" : "text-subtle"
-                    }`}
-                  >
-                    {g.ws}
-                  </span>
-                </div>
-                {g.open && (
-                  <ul className="ml-5 space-y-0.5">
-                    {[ui.s1, ui.s2].map((s, i) => (
-                      <li
-                        key={s}
-                        className={`truncate rounded-tag px-2 py-1.5 text-sm ${
-                          i === 0
-                            ? "bg-bubble text-foreground"
-                            : "text-foreground"
+                    <span
+                      className={`h-2 w-2 rounded-full ${
+                        openGroups[ws] ? "bg-brand" : "bg-line"
+                      }`}
+                    />
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-0.5">
+                {[ui.wsActive, ui.wsOther].map((ws) => {
+                  const open = !!openGroups[ws];
+                  const sessions =
+                    ws === ui.wsActive
+                      ? (["s1", "s2"] as const)
+                      : (["s3"] as const);
+                  return (
+                    <section key={ws}>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setOpenGroups((prev) => ({ ...prev, [ws]: !open }))
+                        }
+                        aria-expanded={open}
+                        title={ws}
+                        className={`flex w-full min-w-0 items-center gap-2 rounded-tag py-1.5 pl-1 pr-2 text-left text-sm transition-colors ${
+                          ws === ui.wsActive ? "bg-bubble" : "hover:bg-bubble"
                         }`}
                       >
-                        {s}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {!g.open && (
-                  <div className="ml-5 truncate rounded-tag px-2 py-1.5 text-sm text-foreground">
-                    {ui.s3}
-                  </div>
-                )}
-              </section>
-            ))}
+                        <Icon
+                          d={PATHS.chevronRight}
+                          size={13}
+                          className={`text-subtle transition-transform ${
+                            open ? "rotate-90" : ""
+                          }`}
+                        />
+                        <span
+                          className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                            ws === ui.wsActive ? "bg-brand" : "bg-line"
+                          }`}
+                        />
+                        <span
+                          className={`truncate ${
+                            ws === ui.wsActive
+                              ? "font-medium text-foreground"
+                              : "text-subtle"
+                          }`}
+                        >
+                          {ws}
+                        </span>
+                      </button>
+                      {open && (
+                        <ul className="ml-5 mt-0.5 space-y-0.5">
+                          {sessions.map((s) => (
+                            <li key={s}>
+                              <button
+                                type="button"
+                                onClick={() => setActiveSession(s)}
+                                className={`w-full truncate rounded-tag px-2 py-1.5 text-left text-sm transition-colors hover:bg-bubble ${
+                                  activeSession === s
+                                    ? "bg-bubble text-foreground"
+                                    : "text-foreground"
+                                }`}
+                              >
+                                {ui[s]}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </section>
+                  );
+                })}
+              </div>
+            )}
           </div>
+
           <footer className="shrink-0 px-3 pb-3">
-            <div className="flex items-center gap-2 rounded-tag px-2 py-1.5 text-sm text-subtle">
+            <button
+              type="button"
+              title={collapsed ? ui.settings : undefined}
+              className={`flex w-full items-center rounded-tag text-sm text-subtle transition-colors hover:bg-bubble hover:text-foreground ${
+                collapsed ? "justify-center px-0 py-1.5" : "gap-2 px-2 py-1.5"
+              }`}
+            >
               <Icon d={PATHS.settings} size={14} />
-              <span className="truncate">{ui.settings}</span>
-            </div>
+              {!collapsed && <span className="truncate">{ui.settings}</span>}
+            </button>
           </footer>
         </aside>
 
-        {/* ---- 主列：消息流 + 输入区（复刻 MessageList/InputArea） ---- */}
+        {/* ---- 主列：消息流 + 输入区 ---- */}
         <div className="flex min-w-0 flex-1 flex-col">
-          <div className="mx-auto w-full max-w-2xl flex-1 overflow-hidden px-6 pt-6">
+          <div
+            ref={scrollRef}
+            className="scrollbar-hidden mx-auto w-full max-w-2xl flex-1 overflow-y-auto px-6 pb-2 pt-6"
+          >
             <div className="flex flex-col gap-6">
-              {/* 用户气泡（复刻 UserBubble） */}
               <div className="flex justify-end">
                 <div className="max-w-[75%] whitespace-pre-wrap break-words rounded-card bg-bubble px-4 py-3 text-[15px] leading-relaxed text-foreground">
                   {ui.user}
                 </div>
               </div>
-              {/* assistant 动作行（复刻 ActionRow：一条展开、一条收起） */}
+
               <div className="flex flex-col gap-3">
-                {[
-                  { text: ui.action1, detail: ui.detail1, open: true },
-                  { text: ui.action2, detail: ui.detail2, open: false },
-                ].map((row) => (
-                  <div
-                    key={row.text}
-                    className="font-mono text-[13px] leading-relaxed"
-                  >
-                    <div className="flex items-start gap-2">
-                      <span
-                        className={`mt-1 text-subtle ${
-                          row.open ? "rotate-90" : ""
-                        } transition-transform`}
+                {actionRows.map((row, i) => {
+                  const open = !!openDetails[i];
+                  return (
+                    <div
+                      key={row.text}
+                      className="font-mono text-[13px] leading-relaxed"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => toggleDetail(i)}
+                        aria-expanded={open}
+                        className="flex w-full items-start gap-2 text-left"
                       >
-                        <Icon d={PATHS.chevronRight} size={13} />
-                      </span>
-                      <span className="break-all text-subtle">{row.text}</span>
+                        <Icon
+                          d={PATHS.chevronRight}
+                          size={13}
+                          className={`mt-1 text-subtle transition-transform ${
+                            open ? "rotate-90" : ""
+                          }`}
+                        />
+                        <span className="break-all text-subtle">
+                          {row.text}
+                        </span>
+                      </button>
+                      {open && (
+                        <pre className="ml-5 mt-1.5 whitespace-pre-wrap break-words rounded-tag border border-line bg-surface-sunken px-2.5 py-2 text-[12px] leading-relaxed text-subtle">
+                          {row.detail}
+                        </pre>
+                      )}
                     </div>
-                    {row.open && (
-                      <pre className="ml-5 mt-1.5 whitespace-pre-wrap break-words rounded-tag border border-line bg-surface-sunken px-2.5 py-2 text-[12px] leading-relaxed text-subtle">
-                        {row.detail}
-                      </pre>
-                    )}
-                  </div>
-                ))}
-                {/* 结论块（复刻 Markdown 文本块） */}
+                  );
+                })}
+
                 <div className="text-[15px] leading-relaxed text-foreground">
                   <p className="font-semibold">{ui.planTitle}</p>
                   <ul className="mt-1.5 list-disc space-y-1 pl-5 marker:text-subtle">
@@ -256,27 +300,162 @@ export default function AppWindow() {
                   </ul>
                 </div>
               </div>
+
+              {sent.map((m, i) => (
+                <div key={i} className="flex flex-col gap-3">
+                  <div className="flex justify-end">
+                    <div className="max-w-[75%] whitespace-pre-wrap break-words rounded-card bg-bubble px-4 py-3 text-[15px] leading-relaxed text-foreground">
+                      {m.user}
+                    </div>
+                  </div>
+                  <p className="text-[15px] leading-relaxed text-subtle">
+                    {m.reply}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
-          {/* 输入区（复刻 InputArea，focus 态） */}
+
+          {/* 输入区（复刻 InputArea） */}
           <div className="px-6 pb-5 pt-3">
             <div className="mx-auto max-w-2xl">
-              <div className="flex items-center gap-2 rounded-card border border-brand bg-surface px-4 py-3 shadow-sm">
-                <span className="flex-1 text-[15px] text-subtle">
-                  {ui.placeholder}
-                </span>
-                <span className="rounded-full bg-brand p-2 text-white">
+              <div className="flex items-center gap-2 rounded-card border border-line bg-surface px-4 py-3 shadow-xs transition-colors focus-within:border-brand focus-within:shadow-sm">
+                <textarea
+                  rows={1}
+                  value={draft}
+                  onChange={(e) => setDraft(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.nativeEvent.isComposing) return;
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      send();
+                    }
+                  }}
+                  placeholder={ui.placeholders[mode]}
+                  aria-label={ui.placeholders[mode]}
+                  className="max-h-24 min-h-6 flex-1 resize-none bg-transparent py-0 text-[15px] leading-6 text-foreground outline-none placeholder:text-subtle"
+                />
+                <button
+                  type="button"
+                  onClick={send}
+                  disabled={!draft.trim()}
+                  aria-label={ui.send}
+                  className="rounded-full bg-brand p-2 text-white transition-colors enabled:hover:bg-brand-strong disabled:opacity-30"
+                >
                   <Icon d={PATHS.arrowUp} size={14} />
-                </span>
+                </button>
               </div>
+
               <div className="mt-2 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <StatusBar active="Plan" />
-                  <SubButton icon={PATHS.folder}>{ui.wsActive}</SubButton>
+                <div className="flex min-w-0 items-center gap-2">
+                  <div
+                    role="tablist"
+                    aria-label={ui.modeAria}
+                    onKeyDown={onTablistKeyDown}
+                    className="inline-flex items-center gap-0.5 rounded-full border border-line bg-surface p-0.5"
+                  >
+                    {MODES.map((m, i) => (
+                      <button
+                        key={m}
+                        ref={(el) => {
+                          tabRefs.current[i] = el;
+                        }}
+                        type="button"
+                        role="tab"
+                        aria-selected={m === mode}
+                        tabIndex={m === mode ? 0 : -1}
+                        onClick={() => setMode(m)}
+                        className={`rounded-full px-2.5 py-1 text-xs transition-colors ${
+                          m === mode
+                            ? "bg-brand text-white"
+                            : "text-subtle hover:bg-bubble hover:text-foreground"
+                        }`}
+                      >
+                        {MODE_LABELS[m]}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    title={ui.wsActive}
+                    className="flex items-center gap-1.5 py-1 text-xs text-subtle transition-colors hover:text-foreground"
+                  >
+                    <Icon d={PATHS.folder} size={13} />
+                    <span className="max-w-[140px] truncate">
+                      {ui.wsActive}
+                    </span>
+                  </button>
+
                   <span className="h-3 w-px bg-line" />
-                  <SubButton>{ui.model}</SubButton>
+
+                  <div ref={modelRef} className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setModelOpen((v) => !v)}
+                      aria-label={ui.openModel}
+                      aria-expanded={modelOpen}
+                      className="flex items-center gap-1.5 py-1 text-xs text-subtle transition-colors hover:text-foreground"
+                    >
+                      <span className="max-w-[140px] truncate">{model}</span>
+                      <Icon
+                        d={PATHS.chevronUp}
+                        size={12}
+                        className={`transition-transform ${
+                          modelOpen ? "" : "rotate-180"
+                        }`}
+                      />
+                    </button>
+
+                    {modelOpen && (
+                      <div
+                        role="listbox"
+                        aria-label={ui.modelAria}
+                        className="absolute bottom-full left-0 z-10 mb-1.5 w-52 rounded-card border border-line bg-surface p-1.5 shadow-lg"
+                      >
+                        {ui.models.map((g, gi) => (
+                          <div
+                            key={g.provider}
+                            className={gi > 0 ? "border-t border-line pt-1" : ""}
+                          >
+                            <p className="px-2 pb-1 pt-1 text-[11px] text-subtle">
+                              {g.provider}
+                            </p>
+                            {g.list.map((name) => (
+                              <button
+                                key={name}
+                                type="button"
+                                role="option"
+                                aria-selected={name === model}
+                                onClick={() => {
+                                  setModel(name);
+                                  setModelOpen(false);
+                                }}
+                                className={`flex w-full items-center justify-between rounded-tag px-2 py-1.5 text-left text-sm ${
+                                  name === model
+                                    ? "bg-bubble font-medium text-foreground"
+                                    : "text-foreground hover:bg-bubble"
+                                }`}
+                              >
+                                <span className="pl-1.5">{name}</span>
+                                {name === model && (
+                                  <Icon
+                                    d={PATHS.check}
+                                    size={13}
+                                    className="text-brand"
+                                  />
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <p className="text-xs text-subtle">{ui.enterHint}</p>
+                <p className="hidden shrink-0 text-xs text-subtle sm:block">
+                  {ui.enterHint}
+                </p>
               </div>
             </div>
           </div>

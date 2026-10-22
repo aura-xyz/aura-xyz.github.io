@@ -146,6 +146,14 @@ body {
       transparent 72%
     );
   }
+
+  /* 隐藏滚动条但仍可滚动（窗口 mockup / 侧栏列表） */
+  .scrollbar-hidden {
+    scrollbar-width: none;
+  }
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* 减少动态效果：跟随系统，与主应用一致 */

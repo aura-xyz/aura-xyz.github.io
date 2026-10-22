@@ -1,45 +1,16 @@
+import { useState } from "react";
 import { useI18n } from "../i18n/context";
 import type { Dictionary } from "../i18n/zh";
 import Section from "./Section";
 import SectionHeader from "./SectionHeader";
+import Icon from "./Icon";
+import { PATHS } from "./iconPaths";
 
 /**
  * 图文交替分屏（官网常用的 feature rows）。
- * 右侧每条配一个用代码画的 mini 界面片段，素材全部取自主应用真实 UI。
+ * 右侧每条配一个用代码画的 mini 界面片段，素材取自主应用真实 UI；
+ * 模型下拉片段可点击展开 / 收起，和产品里一样。
  */
-
-/** lucide 风格手写图标（24 viewBox） */
-function MiniIcon({
-  d,
-  size = 14,
-  className = "",
-}: {
-  d: string | readonly string[];
-  size?: number;
-  className?: string;
-}) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.75}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className={`shrink-0 ${className}`}
-    >
-      {(typeof d === "string" ? [d] : d).map((p, i) => (
-        <path key={i} d={p} />
-      ))}
-    </svg>
-  );
-}
-
-const CHECK = "M5 12l4 4 10-10";
-const CHEVRON_UP = "M18 15l-6-6-6 6";
 
 /** 统一的「窗口片段」外框 */
 function Frame({ children }: { children: React.ReactNode }) {
@@ -112,7 +83,11 @@ function MockModes({ t }: { t: Dictionary }) {
             {ok.map((v, i) => (
               <span key={i} className="w-10 text-center">
                 {v ? (
-                  <MiniIcon d={CHECK} size={13} className="mx-auto text-success" />
+                  <Icon
+                    d={PATHS.check}
+                    size={13}
+                    className="mx-auto text-success"
+                  />
                 ) : (
                   <span className="text-sm text-subtle opacity-60">—</span>
                 )}
@@ -151,45 +126,70 @@ function MockRust() {
   );
 }
 
-/** 3 · 多模型：模型下拉片段 */
+/** 3 · 多模型：模型下拉片段（可交互，点击开合） */
 function MockModels({ t }: { t: Dictionary }) {
-  const groups: Array<[string, string[], number]> = [
-    ["Zhipu", ["GLM-4.7", "GLM-4.7-Air"], 0],
-    ["DeepSeek", ["DeepSeek Chat"], -1],
-    ["OpenAI", ["GPT Mini"], -1],
-  ];
+  const ui = t.screenshot.ui;
+  const [open, setOpen] = useState(true);
+  const [model, setModel] = useState(ui.models[0].list[0]);
+
   return (
-    <Frame>
-      <div className="rounded-card border border-line bg-surface p-1.5 shadow-xs">
-        {groups.map(([provider, models, checked], gi) => (
-          <div key={provider} className={gi > 0 ? "border-t border-line pt-1" : ""}>
-            <p className="px-2 pb-1 text-[11px] text-subtle">{provider}</p>
-            {models.map((m, mi) => {
-              const active = checked === mi && gi === 0;
-              return (
-                <div
-                  key={m}
-                  className={`flex items-center justify-between rounded-tag px-2 py-1.5 text-sm ${
-                    active
-                      ? "bg-bubble font-medium text-foreground"
-                      : "text-foreground"
-                  }`}
-                >
-                  <span className="pl-1.5">{m}</span>
-                  {active && (
-                    <MiniIcon d={CHECK} size={13} className="text-brand" />
-                  )}
-                </div>
-              );
-            })}
+    <div className="flex min-h-[260px] items-center">
+      <Frame>
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          aria-label={ui.openModel}
+          className="flex w-full items-center justify-between rounded-tag border border-line px-3 py-2 text-sm text-foreground transition-colors hover:border-subtle"
+        >
+          <span>{model}</span>
+          <Icon
+            d={PATHS.chevronUp}
+            size={13}
+            className={`text-subtle transition-transform ${
+              open ? "" : "rotate-180"
+            }`}
+          />
+        </button>
+        {open && (
+          <div className="mt-1.5" role="listbox" aria-label={ui.modelAria}>
+            {ui.models.map((g, gi) => (
+              <div
+                key={g.provider}
+                className={gi > 0 ? "border-t border-line pt-1" : ""}
+              >
+                <p className="px-2 pb-1 pt-1 text-[11px] text-subtle">
+                  {g.provider}
+                </p>
+                {g.list.map((name) => (
+                  <button
+                    key={name}
+                    type="button"
+                    role="option"
+                    aria-selected={name === model}
+                    onClick={() => setModel(name)}
+                    className={`flex w-full items-center justify-between rounded-tag px-2 py-1.5 text-left text-sm transition-colors ${
+                      name === model
+                        ? "bg-bubble font-medium text-foreground"
+                        : "text-foreground hover:bg-bubble"
+                    }`}
+                  >
+                    <span className="pl-1.5">{name}</span>
+                    {name === model && (
+                      <Icon d={PATHS.check} size={13} className="text-brand" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="mt-3 flex items-center gap-1.5 text-xs text-subtle">
-        <MiniIcon d={CHEVRON_UP} size={12} />
-        {t.features.mockNote}
-      </div>
-    </Frame>
+        )}
+        <div className="mt-3 flex items-center gap-1.5 text-xs text-subtle">
+          <Icon d={PATHS.chevronUp} size={12} />
+          {t.features.mockNote}
+        </div>
+      </Frame>
+    </div>
   );
 }
 
@@ -230,7 +230,7 @@ export default function FeatureGrid() {
                       className="flex items-start gap-2.5 text-[15px] text-foreground"
                     >
                       <span className="mt-0.5 text-brand">
-                        <MiniIcon d={CHECK} size={15} />
+                        <Icon d={PATHS.check} size={15} />
                       </span>
                       <span>{b}</span>
                     </li>
