@@ -129,6 +129,23 @@ body {
     border-radius: 4px;
     padding: 0.1em 0.35em;
   }
+
+  /* 首屏氛围：细网格底纹（随主题变色，向上渐隐） */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, var(--line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  /* 首屏顶部品牌色光晕 */
+  .hero-glow {
+    background: radial-gradient(
+      60% 50% at 50% 18%,
+      color-mix(in srgb, var(--color-brand) 14%, transparent),
+      transparent 72%
+    );
+  }
 }
 
 /* 减少动态效果：跟随系统，与主应用一致 */

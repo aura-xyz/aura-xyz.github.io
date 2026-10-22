@@ -16,9 +16,6 @@ export const en: Dictionary = {
     chips: ["Native Windows", "Apache-2.0", "Tauri 2 · Rust", "Auto updates"],
   },
   screenshot: {
-    eyebrow: "The app",
-    heading: "One window, focused work",
-    desc: "Workspaces and sessions on the left, the conversation fills the rest — light and dark themes follow your system automatically.",
     alt: "Aura app main window (follows system theme, rebuilt in code)",
     ui: {
       newChat: "New chat",
@@ -47,22 +44,44 @@ export const en: Dictionary = {
   features: {
     eyebrow: "Features",
     heading: "Why Aura",
-    items: [
+    mockNote: "Switch anytime below the input box",
+    items: [],
+    rows: [
       {
-        title: "Local-first",
-        desc: "Session history, task lists, settings and API keys live in a local SQLite database. Nothing is uploaded to any third party, and your history works offline.",
+        title: "Every byte stays on your machine",
+        desc: "Sessions, keys and settings live only in local SQLite. No account system, no cloud sync overhead, and full history works offline.",
+        bullets: [
+          "One SQLite file — uninstalling removes everything",
+          "API keys stay in local config",
+          "History is grouped by workspace automatically",
+        ],
       },
       {
-        title: "Pure Rust backend",
-        desc: "Built on Tauri 2 for a tiny footprint and low memory use. Core logic is all Rust — the agent reads and writes real files and runs real commands in your workspace.",
+        title: "Three modes, permissions enforced",
+        desc: "Chat is read-only, Plan produces a task list, and only Build may edit files or run commands — out-of-scope calls are double-checked by the program, never by prompt discipline.",
+        bullets: [
+          "Tool calls validated before and after",
+          "Plan mode outputs a structured task list",
+          "Every action stays visible in the flow",
+        ],
       },
       {
-        title: "Three work modes",
-        desc: "Chat, Plan and Build form a strict progression. Permissions are enforced by the program: out-of-scope tool calls are blocked with a clear hint, never silently.",
+        title: "Pure Rust, small and fast",
+        desc: "All core logic runs in Rust; the frontend is a thin UI layer backed by hundreds of tests guarding the boundaries.",
+        bullets: [
+          "249 Rust test cases",
+          "110 frontend test cases",
+          "Build only needs the local toolchain",
+        ],
       },
       {
-        title: "Model agnostic",
-        desc: "Built-in presets for DeepSeek, OpenAI, Anthropic and more, or point Aura at any Base URL. Pin the models you use and switch instantly.",
+        title: "Bring any model",
+        desc: "Built-in presets for major providers, or point Aura at any Base URL. Pin what you use and switch instantly.",
+        bullets: [
+          "Presets and custom Base URLs",
+          "Pin favorite models per provider",
+          "Keys stay local, uploaded to no one",
+        ],
       },
     ],
   },
@@ -108,31 +127,17 @@ export const en: Dictionary = {
     desc: "Reasoning and tool calls appear as plain text in the flow — which files were opened, what was changed, all in the open.",
     userMessagePrefix: "Please",
   },
-  trust: {
-    eyebrow: "Trust",
-    heading: "Open source, transparent, verifiable",
-    items: [
-      {
-        label: "License",
-        value: "Apache 2.0",
-        desc: "The full source is public; contributions are welcome.",
-      },
-      {
-        label: "Source",
-        value: "github.com/aura-xyz/aura",
-        desc: "Source code and the complete release history live here.",
-      },
-      {
-        label: "Data storage",
-        value: "Local SQLite",
-        desc: "No cloud account required; uninstalling removes everything.",
-      },
-    ],
-  },
   footer: {
     github: "GitHub",
     releases: "Download Release",
     readme: "README",
     note: "Documentation is maintained in Chinese",
+  },
+  quote: {
+    line: "Minimal surface. Maximum logic.",
+    sub: "A small surface with a strong core.",
+  },
+  cta: {
+    heading: "Install Aura and finish your first session in ten minutes",
   },
 };

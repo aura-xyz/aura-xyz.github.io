@@ -14,9 +14,6 @@ export const zh = {
     chips: ["Windows 原生", "Apache-2.0", "Tauri 2 · Rust", "自动更新"],
   },
   screenshot: {
-    eyebrow: "应用界面",
-    heading: "一个窗口，专注当前工作",
-    desc: "左侧工作区与会话归类，右侧对话即界面；亮暗两套主题自动跟随系统偏好。",
     alt: "Aura 应用主界面（跟随系统主题，由代码复刻）",
     ui: {
       newChat: "新建对话",
@@ -45,22 +42,40 @@ export const zh = {
   features: {
     eyebrow: "产品特性",
     heading: "为什么选 Aura",
-    items: [
+    mockNote: "输入框下方随时切换",
+    items: [], // 已改用 rows 分屏展示
+    rows: [
       {
-        title: "本地优先",
-        desc: "会话历史、任务清单、设置与 API 密钥全部存在本地 SQLite，配置密钥不上传任何第三方服务，断网也能翻历史。",
+        title: "所有数据都留在本机",
+        desc: "会话、密钥、设置只存本地 SQLite。没有账号体系，没有云端同步开销，断网也能翻完整历史。",
+        bullets: [
+          "SQLite 单文件，卸载即清空",
+          "API 密钥只存本机配置",
+          "工作区自动归类历史对话",
+        ],
       },
       {
-        title: "纯 Rust 后端",
-        desc: "基于 Tauri 2 构建极小体积与低内存占用，核心逻辑全部 Rust 处理，模型直接在工作区真实读写文件、执行命令。",
+        title: "三档模式，权限硬隔离",
+        desc: "Chat 只读、Plan 出计划、Build 才能改文件跑命令——越权调用由程序在调用前后双重校验，不靠提示词自觉。",
+        bullets: [
+          "工具调用前后双重校验",
+          "Plan 模式输出结构化任务清单",
+          "每一步动作都留在对话流里",
+        ],
       },
       {
-        title: "三种工作模式",
-        desc: "对话、规划、执行三档递进：权限由程序硬校验，越权调用会被拦截并提示，而不是静默失败。",
+        title: "纯 Rust，小而快",
+        desc: "核心逻辑全在 Rust 侧，前端只是薄薄一层 UI；数百个测试用例护住行为边界，改坏核心会先报红。",
+        bullets: ["Rust 侧 249 个测试用例", "前端 110 个用例", "构建仅依赖本地工具链"],
       },
       {
-        title: "多模型接入",
-        desc: "内置 DeepSeek、OpenAI、Anthropic 等主流厂商预设，也能自定义 Base URL；常用模型可收藏，点击即切。",
+        title: "接哪家模型仓库都行",
+        desc: "内置主流厂商预设，也可以自定义 Base URL；常用模型收藏置顶，点击即切。",
+        bullets: [
+          "预设与自定义 Base URL",
+          "按厂商分组收藏常用模型",
+          "密钥本地保存，不上传任何第三方",
+        ],
       },
     ],
   },
@@ -106,32 +121,18 @@ export const zh = {
     desc: "推理与工具调用以纯文本形式平铺展示，点什么文件、改了哪里一目了然。",
     userMessagePrefix: "帮我",
   },
-  trust: {
-    eyebrow: "信任",
-    heading: "开源、透明、可验证",
-    items: [
-      {
-        label: "开源许可",
-        value: "Apache 2.0",
-        desc: "全部源码公开，欢迎阅读与贡献。",
-      },
-      {
-        label: "源码仓库",
-        value: "github.com/aura-xyz/aura",
-        desc: "源码与全部 Release 记录都在这里。",
-      },
-      {
-        label: "数据存储",
-        value: "本地 SQLite",
-        desc: "不依赖云端账号体系，卸载即清空。",
-      },
-    ],
-  },
   footer: {
     github: "GitHub",
     releases: "下载 Release",
     readme: "README",
     note: "文档目前以中文维护",
+  },
+  quote: {
+    line: "Minimal surface. Maximum logic.",
+    sub: "界面做减法，逻辑做加法。",
+  },
+  cta: {
+    heading: "装上 Aura，十分钟内完成第一次完整对话",
   },
 };
 
