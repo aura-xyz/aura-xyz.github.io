@@ -9,6 +9,13 @@
       content="Aura 是一个本地优先的桌面 AI Agent，直接在你的工作区里读文件、改代码、跑构建。会话、密钥与配置全部留在本机。"
     />
     <title>Aura — 本地优先的桌面 AI Agent</title>
+    <script>
+      // 跟随系统主题，首帧前同步 html.dark，避免暗色下白闪（与主应用同思路）
+      document.documentElement.classList.toggle(
+        "dark",
+        matchMedia("(prefers-color-scheme: dark)").matches,
+      );
+    </script>
   </head>
   <body>
     <div id="root"></div>

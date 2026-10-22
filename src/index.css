@@ -1,26 +1,88 @@
 @import "tailwindcss";
 
 /*
- * 视觉令牌，来源：主应用 Pinguo 设计体系（app/src/index.css）。
- * 同步日期：2026-10-22。主应用改动时两边一起更新。
- * 首版仅深色主题；亮色与精确令牌同步列入 v0.4。
+ * 视觉令牌：与主应用 Pinguo 设计体系一致。
+ * 来源：app/src/index.css。同步日期：2026-10-22。
+ * 主应用改动时两边一起更新（dev_docs/DESIGN.md §11 维护约定）。
  */
+
+/* 主应用同一变体声明：暗色由 html.dark 驱动（跟随系统） */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------
+   静态令牌
+   --------------------------------------------------------------- */
 @theme {
   --color-brand: #0066cc;
-  --color-brand-strong: #0a80e8;
-  --color-surface: #0a0a0a;
-  --color-surface-raised: #131316;
-  --color-line: #27272a;
-  /* 暗色下品牌蓝对比度不足，文本链接改用亮蓝（与主应用一致，7.6:1） */
-  --color-link: #4da3ff;
+  --color-brand-strong: #0052a3;
+  --color-success: #2f6b4a;
+
+  --radius-card: 1.2rem;
+  --radius-tag: 0.375rem;
+
+  --shadow-2xs: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 8px 24px -8px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 16px 40px -12px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 24px 64px -12px rgba(0, 0, 0, 0.12);
 }
 
-html {
+/* ---------------------------------------------------------------
+   语义令牌（亮 / 暗）
+   --------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+
+  --surface: #ffffff;
+  --surface-sunken: #f5f5f7;
+  --foreground: #3a3a3c;
+  --subtle: #6e6e73;
+  --line: #e5e5ea;
+  --bubble: #f5f5f7;
+  --danger: #d70015;
+  /* 正文链接色：亮色下用品牌蓝 */
+  --link: #0066cc;
+}
+
+.dark {
   color-scheme: dark;
+
+  --surface: #0a0a0a;
+  --surface-sunken: #1c1c1e;
+  --foreground: #f5f5f7;
+  --subtle: #98989d;
+  --line: #454547;
+  --bubble: #1c1c1e;
+  --danger: #ff453a;
+  /* 暗色下品牌蓝对比度不足（3.4:1），链接改用更亮的蓝（7.6:1） */
+  --link: #4da3ff;
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-foreground: var(--foreground);
+  --color-subtle: var(--subtle);
+  --color-line: var(--line);
+  --color-bubble: var(--bubble);
+  --color-danger: var(--danger);
+  --color-link: var(--link);
+}
+
+/* ---------------------------------------------------------------
+   Base
+   --------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
+  background-color: var(--surface);
+  color: var(--foreground);
+  /* 系统字体栈，不引入 Web Font；中英共用，避免混排字重跳变 */
   font-family:
     system-ui,
     "Segoe UI",
@@ -29,8 +91,53 @@ body {
     "PingFang SC",
     "Microsoft YaHei",
     sans-serif;
-  /* 中英共用同一字体栈，避免混排时字重跳变；不引入 Web Font */
+  font-size: 16px;
+  line-height: 1.55;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--color-brand) 20%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------
+   组件级样式（与主应用对齐）
+   --------------------------------------------------------------- */
+@layer components {
+  /* 小节眉题，样式来自主应用 .eyebrow */
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--subtle);
+  }
+
+  /* 等宽工具代码行，demo 区复用主应用 .md 行内 code 样式 */
+  .code-inline {
+    font-family: var(--font-mono, ui-monospace, Consolas, monospace);
+    font-size: 0.88em;
+    background-color: var(--surface-sunken);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1em 0.35em;
+  }
+}
+
+/* 减少动态效果：跟随系统，与主应用一致 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
