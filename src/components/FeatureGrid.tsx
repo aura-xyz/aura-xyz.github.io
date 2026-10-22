@@ -203,7 +203,7 @@ const MOCKS: Array<(t: Dictionary) => React.ReactNode> = [
 export default function FeatureGrid() {
   const { t } = useI18n();
   return (
-    <Section>
+    <Section id="features">
       <SectionHeader
         eyebrow={t.features.eyebrow}
         heading={t.features.heading}

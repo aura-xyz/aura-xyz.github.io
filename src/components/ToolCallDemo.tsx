@@ -74,7 +74,7 @@ export default function ToolCallDemo() {
   const { lang, t } = useI18n();
 
   return (
-    <Section>
+    <Section id="demo">
       <SectionHeader
         eyebrow={t.demo.eyebrow}
         heading={t.demo.heading}

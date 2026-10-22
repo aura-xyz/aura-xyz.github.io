@@ -6,6 +6,12 @@ export const en: Dictionary = {
     description:
       "Aura is a local-first desktop AI agent that reads, edits and builds right inside your workspace. Sessions, keys and settings never leave your machine.",
   },
+  nav: {
+    features: "Features",
+    demo: "Demo",
+    download: "Download",
+    getStarted: "Download",
+  },
   hero: {
     subtitle:
       "Local-first desktop AI agent that reads, edits and builds right inside your workspace. Sessions, keys and settings never leave your machine.",
@@ -146,9 +152,18 @@ export const en: Dictionary = {
     userMessagePrefix: "Please",
   },
   footer: {
+    tagline:
+      "A local-first desktop AI agent — sessions and keys never leave your machine.",
+    product: "Product",
+    productFeatures: "Features",
+    productDemo: "Demo",
+    productDownload: "Download",
+    resources: "Resources",
     github: "GitHub",
-    releases: "Download Release",
+    releases: "Releases",
     readme: "README",
+    about: "About",
+    license: "Apache 2.0 License",
     note: "Documentation is maintained in Chinese",
   },
   quote: {

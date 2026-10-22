@@ -7,9 +7,11 @@ import { useEffect, useRef, useState } from "react";
 export default function Section({
   children,
   className = "",
+  id,
 }: {
   children: React.ReactNode;
   className?: string;
+  id?: string;
 }) {
   const ref = useRef<HTMLElement>(null);
   const [shown, setShown] = useState(
@@ -35,7 +37,8 @@ export default function Section({
   return (
     <section
       ref={ref}
-      className={`mx-auto w-full max-w-6xl px-6 py-20 transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none sm:py-24 ${
+      id={id}
+      className={`mx-auto w-full max-w-6xl scroll-mt-20 px-6 py-20 transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none sm:py-24 ${
         shown ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
       } ${className}`}
     >

@@ -4,6 +4,12 @@ export const zh = {
     description:
       "Aura 是一个本地优先的桌面 AI Agent，直接在你的工作区里读文件、改代码、跑构建。会话、密钥与配置全部留在本机。",
   },
+  nav: {
+    features: "特性",
+    demo: "演示",
+    download: "下载",
+    getStarted: "下载",
+  },
   hero: {
     subtitle:
       "本地优先的桌面 AI Agent，直接在你的工作区里读文件、改代码、跑构建。会话、密钥与配置全部留在本机。",
@@ -140,9 +146,17 @@ export const zh = {
     userMessagePrefix: "帮我",
   },
   footer: {
+    tagline: "本地优先的桌面 AI Agent，会话与密钥都留在你的机器上。",
+    product: "产品",
+    productFeatures: "特性",
+    productDemo: "交互演示",
+    productDownload: "下载",
+    resources: "资源",
     github: "GitHub",
-    releases: "下载 Release",
+    releases: "Releases",
     readme: "README",
+    about: "关于",
+    license: "Apache 2.0 许可",
     note: "文档目前以中文维护",
   },
   quote: {

@@ -7,7 +7,7 @@ const RELEASES_URL = `${REPO_URL}/releases/latest`;
 export default function CtaBand() {
   const { t } = useI18n();
   return (
-    <div className="mx-auto max-w-6xl px-6 py-20">
+    <div id="download" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-20">
       <div className="relative overflow-hidden rounded-card bg-brand px-6 py-14 text-center text-white sm:px-12">
         {/* 斜向高光纹理，静态直读氛围 */}
         <div

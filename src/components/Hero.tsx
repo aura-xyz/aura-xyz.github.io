@@ -17,7 +17,7 @@ export default function Hero() {
         <div className="hero-glow absolute inset-x-0 top-0 h-[520px]" />
       </div>
 
-      <div className="mx-auto max-w-3xl px-6 pt-20 pb-12 text-center sm:pt-28">
+      <div className="mx-auto max-w-3xl px-6 pt-16 pb-12 text-center sm:pt-24">
         <img src="/logo.png" width={88} height={88} alt="Aura" className="mx-auto mb-7 rounded-2xl" />
         <h1 className="mb-3 text-5xl font-semibold tracking-[-0.03em] text-foreground sm:text-6xl">
           Aura
