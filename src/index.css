@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+/*
+ * 视觉令牌，来源：主应用 Pinguo 设计体系（app/src/index.css）。
+ * 同步日期：2026-10-22。主应用改动时两边一起更新。
+ * 首版仅深色主题；亮色与精确令牌同步列入 v0.4。
+ */
+@theme {
+  --color-brand: #0066cc;
+  --color-brand-strong: #0a80e8;
+  --color-surface: #0a0a0a;
+  --color-surface-raised: #131316;
+  --color-line: #27272a;
+  /* 暗色下品牌蓝对比度不足，文本链接改用亮蓝（与主应用一致，7.6:1） */
+  --color-link: #4da3ff;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    "PingFang SC",
+    "Microsoft YaHei",
+    sans-serif;
+  /* 中英共用同一字体栈，避免混排时字重跳变；不引入 Web Font */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
