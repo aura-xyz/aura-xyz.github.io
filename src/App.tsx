@@ -1,6 +1,7 @@
 import CtaBand from "./components/CtaBand";
 import FeatureGrid from "./components/FeatureGrid";
 import Footer from "./components/Footer";
+import SkillsShowcase from "./components/SkillsShowcase";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import ModeSwitcher from "./components/ModeSwitcher";
@@ -13,6 +14,10 @@ export default function App() {
   return (
     <LanguageProvider>
       <div id="top" className="flex min-h-svh flex-col bg-surface text-foreground">
+        <div
+          className="page-top-rule fixed inset-x-0 top-0 z-50 h-0.5"
+          aria-hidden="true"
+        />
         <Header />
         <main className="flex flex-1 flex-col">
           <Hero />
@@ -21,6 +26,7 @@ export default function App() {
           <div className="border-y border-line bg-surface-sunken">
             <FeatureGrid />
           </div>
+          <SkillsShowcase />
           <ModeSwitcher />
           <ToolCallDemo />
           <Quote />

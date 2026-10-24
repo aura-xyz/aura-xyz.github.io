@@ -87,14 +87,25 @@ export default function ToolCallDemo() {
             {demoUserMessage[lang]}
           </div>
         </div>
-        <div className="flex flex-col gap-3">
+        {/* 透明动作流：竖向时间线，体现"逐步、可审计" */}
+        <div className="timeline flex flex-col gap-5">
           {demoBlocks.map((block, i) =>
             block.kind === "action" ? (
-              <DemoAction key={i} block={block} />
+              <div key={i} className="timeline-node pl-7">
+                <DemoAction block={block} />
+              </div>
             ) : (
-              <p key={i} className="text-[15px] leading-relaxed">
-                <InlineText text={block.text[lang]} />
-              </p>
+              <div key={i} className="timeline-node pl-7">
+                <p className="text-[15px] leading-relaxed">
+                  <InlineText text={block.text[lang]} />
+                  {i === demoBlocks.length - 1 && (
+                    <span
+                      className="aura-breathing-cursor ml-1"
+                      aria-hidden="true"
+                    />
+                  )}
+                </p>
+              </div>
             ),
           )}
         </div>

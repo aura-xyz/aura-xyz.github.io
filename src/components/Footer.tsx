@@ -8,9 +8,17 @@ export default function Footer() {
   const navClass =
     "text-sm text-subtle transition-colors hover:text-foreground";
   return (
-    <footer className="border-t border-line">
-      <div className="mx-auto w-full max-w-6xl px-6 py-14">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr]">
+    <footer className="bg-surface-sunken">
+      <div
+        aria-hidden="true"
+        className="h-px w-full"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-brand) 45%, transparent), transparent)",
+        }}
+      />
+      <div className="mx-auto w-full max-w-6xl px-6 py-16">
+        <div className="grid gap-10 sm:grid-cols-2 sm:gap-12 lg:grid-cols-[1.6fr_1fr_1fr]">
           <div>
             <div className="flex items-center gap-2.5">
               <img src="/logo.png" alt="" className="h-6 w-6" />
@@ -25,7 +33,7 @@ export default function Footer() {
 
           <nav aria-label={t.footer.product}>
             <p className="eyebrow mb-3">{t.footer.product}</p>
-            <ul className="space-y-2.5">
+            <ul className="space-y-3">
               <li>
                 <a href="#features" className={navClass}>
                   {t.footer.productFeatures}
@@ -46,7 +54,7 @@ export default function Footer() {
 
           <nav aria-label={t.footer.resources}>
             <p className="eyebrow mb-3">{t.footer.resources}</p>
-            <ul className="space-y-2.5">
+            <ul className="space-y-3">
               <li>
                 <a
                   href={REPO_URL}

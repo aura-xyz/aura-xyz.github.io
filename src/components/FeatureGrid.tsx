@@ -12,11 +12,16 @@ import { PATHS } from "./iconPaths";
  * 模型下拉片段可点击展开 / 收起，和产品里一样。
  */
 
-/** 统一的「窗口片段」外框 */
+/** 统一的「窗口片段」外框：带面板圆点与内描边，hover 抬升 */
 function Frame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-card border border-line bg-surface p-5 shadow-sm">
-      {children}
+    <div className="card-elev overflow-hidden">
+      <div className="flex items-center gap-1.5 border-b border-line/70 px-4 py-2.5">
+        <span className="h-2 w-2 rounded-full bg-line" />
+        <span className="h-2 w-2 rounded-full bg-line" />
+        <span className="h-2 w-2 rounded-full bg-line" />
+      </div>
+      <div className="p-5">{children}</div>
     </div>
   );
 }
@@ -79,9 +84,9 @@ function MockEdit({ t }: { t: Dictionary }) {
 function MockRust({ t }: { t: Dictionary }) {
   const lines: Array<{ text: string; tone: "cmd" | "ok" | "plain" }> = [
     { text: "$ cargo test", tone: "cmd" },
-    { text: "test result: ok. 249 passed; 0 failed", tone: "plain" },
+    { text: "test result: ok. 322 passed; 0 failed", tone: "plain" },
     { text: "$ pnpm test", tone: "cmd" },
-    { text: "110 tests passed", tone: "plain" },
+    { text: "171 tests passed", tone: "plain" },
     { text: t.features.testNote, tone: "ok" },
   ];
   return (
@@ -192,6 +197,9 @@ export default function FeatureGrid() {
               className="grid items-center gap-8 py-10 first:pt-0 last:pb-0 sm:gap-12 lg:grid-cols-2 lg:gap-16"
             >
               <div className={flip ? "lg:order-2" : ""}>
+                <span className="num-badge mb-3 inline-block">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
                 <h3 className="text-2xl font-semibold tracking-tight text-foreground">
                   {row.title}
                 </h3>
@@ -204,8 +212,8 @@ export default function FeatureGrid() {
                       key={b}
                       className="flex items-start gap-2.5 text-[15px] text-foreground"
                     >
-                      <span className="mt-0.5 text-brand">
-                        <Icon d={PATHS.check} size={15} />
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand">
+                        <Icon d={PATHS.check} size={13} />
                       </span>
                       <span>{b}</span>
                     </li>

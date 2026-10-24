@@ -21,6 +21,14 @@ export const en: Dictionary = {
     githubHint: "Browse the source repository",
     chips: ["Native Windows", "Apache-2.0", "Tauri 2 · Rust", "Auto updates"],
   },
+  trust: {
+    items: [
+      "Local-first by design",
+      "No account required",
+      "Apache-2.0 open source",
+      "Zero telemetry",
+    ],
+  },
   screenshot: {
     alt: "Aura app main window (follows system theme, rebuilt in code)",
     ui: {
@@ -42,7 +50,6 @@ export const en: Dictionary = {
       plan1: "`search.rs`: split matched ranges into a `Span` list for the renderer",
       plan2: "Add a `mark` style: brand blue 12% in light, bubble background + underline in dark",
       plan3: "SearchBar only consumes the rendered result — no shortcut behavior changes",
-      placeholder: "Type a message…",
       placeholders: {
         chat: "Type a message…",
         plan: "Describe what you want — Aura will plan it first…",
@@ -57,11 +64,13 @@ export const en: Dictionary = {
       demoHint:
         "Demo window: install Aura and connect a model to continue a real conversation here.",
       models: [
-        { provider: "Zhipu", list: ["GLM-4.7", "GLM-4.7-Air"] },
-        { provider: "DeepSeek", list: ["DeepSeek Chat"] },
-        { provider: "OpenAI", list: ["GPT Mini"] },
+        { provider: "DeepSeek", list: ["DeepSeek-V4.1-Flash"] },
+        { provider: "Alibaba", list: ["Qwen3.8-Max"] },
+        { provider: "Zhipu", list: ["GLM-5.3-FlashX"] },
+        { provider: "Moonshot", list: ["Kimi K3.1 Pro"] },
+        { provider: "MiniMax", list: ["M3.1 Flash"] },
       ],
-      model: "GLM-4.7",
+      model: "DeepSeek-V4.1-Flash",
       enterHint: "Enter to send · Shift+Enter for newline",
     },
   },
@@ -95,8 +104,8 @@ export const en: Dictionary = {
         title: "Pure Rust, small and fast",
         desc: "All core logic runs in Rust; the frontend is a thin UI layer backed by hundreds of tests guarding the boundaries.",
         bullets: [
-          "249 Rust test cases",
-          "110 frontend test cases",
+          "322 Rust test cases",
+          "171 frontend test cases",
           "Build only needs the local toolchain",
         ],
       },
@@ -153,7 +162,6 @@ export const en: Dictionary = {
     desc: "Reasoning and tool calls appear as plain text in the flow — which files were opened, what was changed, all in the open.",
     expand: "Expand output",
     collapse: "Collapse output",
-    userMessagePrefix: "Please",
   },
   footer: {
     tagline:
@@ -174,6 +182,29 @@ export const en: Dictionary = {
     sub: "A small surface with a strong core.",
   },
   cta: {
+    eyebrow: "Get started",
     heading: "Install Aura and finish your first session in ten minutes",
+    subtitle:
+      "Free, open source and local-first — sessions and keys never leave your machine.",
+  },
+  skills: {
+    eyebrow: "Skills",
+    heading: "Plug abilities into your workspace",
+    desc: "Skills are reusable instructions, loaded on demand and kept out of context until needed. Built-ins work out of the box, or install from the official marketplace — with a security review before it lands.",
+    bullets: [
+      "Built-in docx / pdf / skill-creator, ready to use",
+      "One-click install from the official marketplace, sha256 enforced",
+      "Static review before install: permissions, risky commands, prompt injection",
+      "Add any GitHub repo as an extra skill source",
+    ],
+    panelTitle: "Skills",
+    builtin: "Built-in",
+    market: "Market",
+    install: "Install",
+    items: [
+      { name: "docx", desc: "Word create / edit / annotate" },
+      { name: "pdf", desc: "Read / merge / forms / OCR" },
+      { name: "skill-creator", desc: "Write your own skills" },
+    ],
   },
 };

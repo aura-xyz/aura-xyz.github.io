@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import { useI18n } from "../i18n/context";
 import Section from "./Section";
 import SectionHeader from "./SectionHeader";
+import Icon from "./Icon";
+import { PATHS } from "./iconPaths";
 
 type Mode = "chat" | "plan" | "build";
 const MODES: Mode[] = ["chat", "plan", "build"];
@@ -72,7 +74,10 @@ export default function ModeSwitcher() {
         })}
       </div>
 
-      <div className="mx-auto max-w-2xl rounded-card border border-line p-8 text-center">
+      <div
+        key={mode}
+        className="mode-in mode-card mx-auto max-w-2xl p-8 text-center"
+      >
         <h3 className="mb-1 text-lg font-semibold text-foreground">
           {current.name}
           {lang === "zh" && (
@@ -86,7 +91,7 @@ export default function ModeSwitcher() {
           {matrix.map(({ key, ok }) => (
             <div
               key={key}
-              className="flex flex-col items-center gap-1"
+              className="flex flex-col items-center gap-2"
               title={
                 ok
                   ? lang === "zh"
@@ -97,14 +102,16 @@ export default function ModeSwitcher() {
                     : "not allowed"
               }
             >
-              {/* 避开 dl 的 dt/dd 次序约束：直接用 div + span，符号配文字标签 */}
+              {/* 权限以圆形徽章表达：允许=品牌绿填充，拒绝=中性描边 */}
               <span
                 aria-hidden="true"
-                className={`text-xl font-semibold transition-colors duration-300 ${
-                  ok ? "text-success" : "text-subtle opacity-60"
+                className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors duration-300 ${
+                  ok
+                    ? "bg-success/12 text-success"
+                    : "bg-surface-sunken text-subtle opacity-60"
                 }`}
               >
-                {ok ? "✓" : "—"}
+                {ok ? <Icon d={PATHS.check} size={15} /> : "—"}
               </span>
               <span className="text-xs text-subtle">
                 {t.modes.columns[key]}

@@ -25,10 +25,10 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-40 border-b backdrop-blur-md transition-[background-color,border-color] duration-200 ${
+      className={`sticky top-0 z-40 backdrop-blur-md transition-[background-color,border-color] duration-200 ${
         scrolled
-          ? "border-line bg-surface/85"
-          : "border-transparent bg-surface/0"
+          ? "border-b border-line bg-surface/80"
+          : "border-b border-line/60 bg-surface/0"
       }`}
     >
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-6 px-6">
@@ -69,7 +69,7 @@ export default function Header() {
             href={RELEASES_URL}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-brand-strong"
+            className="inline-flex items-center rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white shadow-sm shadow-brand/25 transition-colors hover:bg-brand-strong hover:shadow-md hover:shadow-brand/30"
           >
             {t.nav.getStarted}
           </a>

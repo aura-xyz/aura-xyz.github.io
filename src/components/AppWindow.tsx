@@ -90,14 +90,14 @@ export default function AppWindow() {
   ];
 
   return (
-    <div className="overflow-hidden rounded-card border border-line text-left shadow-xl transition-shadow hover:shadow-2xl">
+    <div className="overflow-hidden rounded-card border border-line text-left shadow-2xl ring-1 ring-line transition-shadow hover:shadow-2xl">
       {/* ---- 标题栏（复刻主应用 TitleBar；版本号与主应用发布同步） ---- */}
       <div className="flex h-9 shrink-0 select-none items-center justify-between border-b border-line bg-surface pl-4">
         <div className="flex items-baseline gap-2">
           <span className="text-[13px] font-semibold tracking-[-0.02em] text-foreground">
             Aura
           </span>
-          <span className="font-mono text-[11px] text-subtle">v0.5.2</span>
+          <span className="font-mono text-[11px] text-subtle">v0.6.1</span>
         </div>
         <div aria-hidden="true" className="flex h-full">
           <span className="flex h-full w-11 items-center justify-center text-subtle transition-colors hover:bg-bubble hover:text-foreground">

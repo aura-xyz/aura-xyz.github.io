@@ -19,6 +19,9 @@ export const zh = {
     githubHint: "查看源码仓库",
     chips: ["Windows 原生", "Apache-2.0", "Tauri 2 · Rust", "自动更新"],
   },
+  trust: {
+    items: ["本地优先运行", "无需注册账号", "Apache-2.0 开源", "零遥测上报"],
+  },
   screenshot: {
     alt: "Aura 应用主界面（跟随系统主题，由代码复刻）",
     ui: {
@@ -40,7 +43,6 @@ export const zh = {
       plan1: "`search.rs`：把命中区间切分成 `Span` 列表，交给渲染层",
       plan2: "新增 `mark` 样式：亮色用品牌蓝 12% 底色，深色改用 bubble 底 + 下划线",
       plan3: "SearchBar 只消费渲染结果，不改动现有快捷键行为",
-      placeholder: "输入消息…",
       placeholders: {
         chat: "输入消息…",
         plan: "描述你想做的事，先让 Aura 给出计划…",
@@ -55,11 +57,13 @@ export const zh = {
       demoHint:
         "演示窗口：安装 Aura 并接入模型后，就能在这里继续真实对话。",
       models: [
-        { provider: "Zhipu", list: ["GLM-4.7", "GLM-4.7-Air"] },
-        { provider: "DeepSeek", list: ["DeepSeek Chat"] },
-        { provider: "OpenAI", list: ["GPT Mini"] },
+        { provider: "DeepSeek", list: ["DeepSeek-V4.1-Flash"] },
+        { provider: "阿里云", list: ["Qwen3.8-Max"] },
+        { provider: "智谱AI", list: ["GLM-5.3-FlashX"] },
+        { provider: "月之暗面", list: ["Kimi K3.1 Pro"] },
+        { provider: "MiniMax", list: ["M3.1 Flash"] },
       ],
-      model: "GLM-4.7",
+      model: "DeepSeek-V4.1-Flash",
       enterHint: "Enter 发送 · Shift+Enter 换行",
     },
   },
@@ -92,7 +96,7 @@ export const zh = {
       {
         title: "纯 Rust，小而快",
         desc: "核心逻辑全在 Rust 侧，前端只是薄薄一层 UI；数百个测试用例护住行为边界，改坏核心会先报红。",
-        bullets: ["Rust 侧 249 个测试用例", "前端 110 个用例", "构建仅依赖本地工具链"],
+        bullets: ["Rust 侧 322 个测试用例", "前端 171 个用例", "构建仅依赖本地工具链"],
       },
       {
         title: "接哪家模型仓库都行",
@@ -147,7 +151,6 @@ export const zh = {
     desc: "推理与工具调用以纯文本形式平铺展示，点什么文件、改了哪里一目了然。",
     expand: "展开输出",
     collapse: "收起输出",
-    userMessagePrefix: "帮我",
   },
   footer: {
     tagline: "本地优先的桌面 AI Agent，会话与密钥都留在你的机器上。",
@@ -167,7 +170,29 @@ export const zh = {
     sub: "界面做减法，逻辑做加法。",
   },
   cta: {
+    eyebrow: "现在开始",
     heading: "装上 Aura，十分钟内完成第一次完整对话",
+    subtitle: "免费、开源、本地优先，会话与密钥都在你的机器上。",
+  },
+  skills: {
+    eyebrow: "技能系统",
+    heading: "把能力装进工作区",
+    desc: "技能是可复用的操作指引，按需加载、不占上下文。内置开箱即用的能力，也能从官方市场一键安装——装前还会做安全审查。",
+    bullets: [
+      "内置 docx / pdf / skill-creator，开箱即用",
+      "官方市场一键安装，安装包强制校验 sha256",
+      "装前静态审查：权限、高危命令、提示词注入逐项列出",
+      "可添加任意 GitHub 仓库作为技能来源",
+    ],
+    panelTitle: "Skills",
+    builtin: "内置",
+    market: "市场",
+    install: "安装",
+    items: [
+      { name: "docx", desc: "Word 创建 / 编辑 / 批注" },
+      { name: "pdf", desc: "读写 / 合并 / 表单 / OCR" },
+      { name: "skill-creator", desc: "编写你自己的技能" },
+    ],
   },
 };
 
