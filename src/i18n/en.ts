@@ -19,7 +19,7 @@ export const en: Dictionary = {
     downloadHint: "Get the latest installer for Windows",
     github: "GitHub",
     githubHint: "Browse the source repository",
-    chips: ["Native Windows", "Apache-2.0", "Tauri 2 · Rust", "Auto updates"],
+    techNote: "Native Windows · Tauri 2 · Rust · auto updates",
   },
   trust: {
     items: [
@@ -80,7 +80,6 @@ export const en: Dictionary = {
     mockNote: "Switch anytime below the input box",
     testNote: "✓ Core, UI and permission paths covered",
     editResult: "written · cargo check passed",
-    items: [],
     rows: [
       {
         title: "Every byte stays on your machine",
@@ -157,8 +156,6 @@ export const en: Dictionary = {
     },
   },
   demo: {
-    eyebrow: "Transparency",
-    heading: "Every action stays in the conversation",
     desc: "Reasoning and tool calls appear as plain text in the flow — which files were opened, what was changed, all in the open.",
     expand: "Expand output",
     collapse: "Collapse output",
@@ -178,7 +175,6 @@ export const en: Dictionary = {
     note: "Documentation is maintained in Chinese",
   },
   quote: {
-    line: "Minimal surface. Maximum logic.",
     sub: "A small surface with a strong core.",
   },
   cta: {

@@ -17,7 +17,7 @@ export const zh = {
     downloadHint: "获取适合 Windows 的最新安装包",
     github: "GitHub",
     githubHint: "查看源码仓库",
-    chips: ["Windows 原生", "Apache-2.0", "Tauri 2 · Rust", "自动更新"],
+    techNote: "Windows 原生 · Tauri 2 · Rust · 自动更新",
   },
   trust: {
     items: ["本地优先运行", "无需注册账号", "Apache-2.0 开源", "零遥测上报"],
@@ -73,7 +73,6 @@ export const zh = {
     mockNote: "输入框下方随时切换",
     testNote: "✓ 核心、UI、权限路径全覆盖",
     editResult: "已写入 · cargo check 通过",
-    items: [], // 已改用 rows 分屏展示
     rows: [
       {
         title: "所有数据都留在本机",
@@ -146,8 +145,6 @@ export const zh = {
     },
   },
   demo: {
-    eyebrow: "思考过程",
-    heading: "每一步动作都在对话流里",
     desc: "推理与工具调用以纯文本形式平铺展示，点什么文件、改了哪里一目了然。",
     expand: "展开输出",
     collapse: "收起输出",
@@ -166,7 +163,6 @@ export const zh = {
     note: "文档目前以中文维护",
   },
   quote: {
-    line: "Minimal surface. Maximum logic.",
     sub: "界面做减法，逻辑做加法。",
   },
   cta: {

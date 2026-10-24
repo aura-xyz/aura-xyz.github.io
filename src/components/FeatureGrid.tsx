@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useI18n } from "../i18n/context";
 import type { Dictionary } from "../i18n/zh";
 import Section from "./Section";
@@ -12,10 +12,19 @@ import { PATHS } from "./iconPaths";
  * 模型下拉片段可点击展开 / 收起，和产品里一样。
  */
 
-/** 统一的「窗口片段」外框：带面板圆点与内描边，hover 抬升 */
-function Frame({ children }: { children: React.ReactNode }) {
+/**
+ * 统一的「窗口片段」外框：带面板圆点与内描边，hover 抬升。
+ * clip=false 用于内部有浮层（下拉）的片段——否则会被 overflow-hidden 裁掉。
+ */
+function Frame({
+  children,
+  clip = true,
+}: {
+  children: React.ReactNode;
+  clip?: boolean;
+}) {
   return (
-    <div className="card-elev overflow-hidden">
+    <div className={`card-elev ${clip ? "overflow-hidden" : ""}`}>
       <div className="flex items-center gap-1.5 border-b border-line/70 px-4 py-2.5">
         <span className="h-2 w-2 rounded-full bg-line" />
         <span className="h-2 w-2 rounded-full bg-line" />
@@ -106,64 +115,99 @@ function MockRust({ t }: { t: Dictionary }) {
   );
 }
 
-/** 3 · 多模型：模型下拉片段（可交互，点击开合） */
+/**
+ * 3 · 多模型：模型下拉片段（可交互）。
+ * 下拉以浮层形式绝对定位展开——原先它在正常文档流里，展开会把卡片乃至整个
+ * 区块的边界撑长；浮层化后卡片尺寸恒定，超出部分内部滚动。
+ * 点击外部 / Esc 收起，与主应用 ModelSelect 行为一致。
+ */
 function MockModels({ t }: { t: Dictionary }) {
   const ui = t.screenshot.ui;
   const [open, setOpen] = useState(false);
   const [model, setModel] = useState(ui.models[0].list[0]);
+  const boxRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (!boxRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   return (
     <div className="flex min-h-[260px] items-center">
-      <Frame>
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-label={ui.openModel}
-          className="flex w-full items-center justify-between rounded-tag border border-line px-3 py-2 text-sm text-foreground transition-colors hover:border-subtle"
-        >
-          <span>{model}</span>
-          <Icon
-            d={PATHS.chevronUp}
-            size={13}
-            className={`text-subtle transition-transform ${
-              open ? "" : "rotate-180"
-            }`}
-          />
-        </button>
-        {open && (
-          <div className="mt-1.5" role="listbox" aria-label={ui.modelAria}>
-            {ui.models.map((g, gi) => (
-              <div
-                key={g.provider}
-                className={gi > 0 ? "border-t border-line pt-1" : ""}
-              >
-                <p className="px-2 pb-1 pt-1 text-[11px] text-subtle">
-                  {g.provider}
-                </p>
-                {g.list.map((name) => (
-                  <button
-                    key={name}
-                    type="button"
-                    role="option"
-                    aria-selected={name === model}
-                    onClick={() => setModel(name)}
-                    className={`flex w-full items-center justify-between rounded-tag px-2 py-1.5 text-left text-sm transition-colors ${
-                      name === model
-                        ? "bg-bubble font-medium text-foreground"
-                        : "text-foreground hover:bg-bubble"
-                    }`}
-                  >
-                    <span className="pl-1.5">{name}</span>
-                    {name === model && (
-                      <Icon d={PATHS.check} size={13} className="text-brand" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            ))}
-          </div>
-        )}
+      <Frame clip={false}>
+        <div ref={boxRef} className="relative">
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-label={ui.openModel}
+            className="flex w-full items-center justify-between rounded-tag border border-line px-3 py-2 text-sm text-foreground transition-colors hover:border-subtle"
+          >
+            <span className="truncate">{model}</span>
+            <Icon
+              d={PATHS.chevronUp}
+              size={13}
+              className={`shrink-0 text-subtle transition-transform ${
+                open ? "" : "rotate-180"
+              }`}
+            />
+          </button>
+          {open && (
+            <div
+              role="listbox"
+              aria-label={ui.modelAria}
+              className="absolute left-0 right-0 top-full z-20 mt-1.5 max-h-56 overflow-y-auto rounded-tag border border-line bg-surface p-1.5 shadow-lg"
+            >
+              {ui.models.map((g, gi) => (
+                <div
+                  key={g.provider}
+                  className={gi > 0 ? "border-t border-line pt-1" : ""}
+                >
+                  <p className="px-2 pb-1 pt-1 text-[11px] text-subtle">
+                    {g.provider}
+                  </p>
+                  {g.list.map((name) => (
+                    <button
+                      key={name}
+                      type="button"
+                      role="option"
+                      aria-selected={name === model}
+                      onClick={() => {
+                        setModel(name);
+                        setOpen(false);
+                      }}
+                      className={`flex w-full items-center justify-between gap-2 rounded-tag px-2 py-1.5 text-left text-sm transition-colors ${
+                        name === model
+                          ? "bg-bubble font-medium text-foreground"
+                          : "text-foreground hover:bg-bubble"
+                      }`}
+                    >
+                      <span className="truncate pl-1.5">{name}</span>
+                      {name === model && (
+                        <Icon
+                          d={PATHS.check}
+                          size={13}
+                          className="shrink-0 text-brand"
+                        />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         <div className="mt-3 flex items-center gap-1.5 text-xs text-subtle">
           <Icon d={PATHS.chevronUp} size={12} />
           {t.features.mockNote}
@@ -183,7 +227,7 @@ const MOCKS: Array<(t: Dictionary) => React.ReactNode> = [
 export default function FeatureGrid() {
   const { t } = useI18n();
   return (
-    <Section id="features">
+    <Section id="features" tone="sunken">
       <SectionHeader
         eyebrow={t.features.eyebrow}
         heading={t.features.heading}
@@ -194,7 +238,7 @@ export default function FeatureGrid() {
           return (
             <div
               key={row.title}
-              className="grid items-center gap-8 py-10 first:pt-0 last:pb-0 sm:gap-12 lg:grid-cols-2 lg:gap-16"
+              className="grid items-center gap-8 py-12 first:pt-0 last:pb-0 sm:gap-12 lg:grid-cols-2 lg:gap-16 lg:py-14"
             >
               <div className={flip ? "lg:order-2" : ""}>
                 <span className="num-badge mb-3 inline-block">

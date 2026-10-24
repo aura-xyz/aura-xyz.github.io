@@ -1,15 +1,20 @@
 import CtaBand from "./components/CtaBand";
 import FeatureGrid from "./components/FeatureGrid";
 import Footer from "./components/Footer";
-import SkillsShowcase from "./components/SkillsShowcase";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
-import ModeSwitcher from "./components/ModeSwitcher";
+import LiveDemo from "./components/LiveDemo";
 import Quote from "./components/Quote";
-import ToolCallDemo from "./components/ToolCallDemo";
-import TrustBar from "./components/TrustBar";
+import SkillsShowcase from "./components/SkillsShowcase";
 import LanguageProvider from "./i18n/provider";
 
+/**
+ * 页面骨架。
+ *
+ * 底色按「白 → 浅 → 白 → 浅 → 白」有意交替，节奏由结构产生而非装饰堆：
+ *   Hero(白) → 特性(浅) → 交互演示(白) → Skills(浅) → 引言(白) → CTA(品牌色)
+ * 区块由 9 个收敛到 6 个：信任条并入 Hero，两种模式演示与工具流合并为 LiveDemo。
+ */
 export default function App() {
   return (
     <LanguageProvider>
@@ -21,14 +26,9 @@ export default function App() {
         <Header />
         <main className="flex flex-1 flex-col">
           <Hero />
-          <TrustBar />
-          {/* 中部特性区通栏浅底，与上下白底形成官网式分段节奏 */}
-          <div className="border-y border-line bg-surface-sunken">
-            <FeatureGrid />
-          </div>
+          <FeatureGrid />
+          <LiveDemo />
           <SkillsShowcase />
-          <ModeSwitcher />
-          <ToolCallDemo />
           <Quote />
           <CtaBand />
         </main>

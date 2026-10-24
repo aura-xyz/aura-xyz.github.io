@@ -1,5 +1,5 @@
 /**
- * 交互演示区（ToolCallDemo）的静态数据。
+ * 交互演示区（LiveDemo 右栏）的静态数据。
  *
  * 与主应用 MessageList 的 block 模型对齐：user 气泡 → action 行 → 正文。
  * 所有内容双语并列；场景贴合 Aura 定位（本地笔记助手）。

@@ -12,7 +12,7 @@ export default function SkillsShowcase() {
   const { t } = useI18n();
 
   return (
-    <Section id="skills">
+    <Section id="skills" tone="sunken">
       <SectionHeader
         eyebrow={t.skills.eyebrow}
         heading={t.skills.heading}
