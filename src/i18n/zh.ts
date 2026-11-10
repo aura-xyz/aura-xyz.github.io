@@ -17,7 +17,7 @@ export const zh = {
     downloadHint: "获取适合 Windows 的最新安装包",
     github: "GitHub",
     githubHint: "查看源码仓库",
-    techNote: "Windows 原生 · Tauri 2 · Rust · 自动更新",
+    techNote: "Windows / Linux 原生 · Tauri 2 · Rust · 自动更新",
   },
   trust: {
     items: ["本地优先运行", "无需注册账号", "Apache-2.0 开源", "零遥测上报"],
@@ -95,7 +95,7 @@ export const zh = {
       {
         title: "纯 Rust，小而快",
         desc: "核心逻辑全在 Rust 侧，前端只是薄薄一层 UI；数百个测试用例护住行为边界，改坏核心会先报红。",
-        bullets: ["Rust 侧 322 个测试用例", "前端 171 个用例", "构建仅依赖本地工具链"],
+        bullets: ["Rust 侧 537 个测试用例", "前端 739 个用例", "构建仅依赖本地工具链"],
       },
       {
         title: "接哪家模型仓库都行",
@@ -104,6 +104,24 @@ export const zh = {
           "预设与自定义 Base URL",
           "按厂商分组收藏常用模型",
           "密钥本地保存，不上传任何第三方",
+        ],
+      },
+      {
+        title: "边写边查，不必切窗口",
+        desc: "内置侧边栏：文件浏览器直接预览源码，内嵌网页面板查文档不用跳出；左侧导航与右侧面板联动，上下文始终在手边。",
+        bullets: [
+          "文件浏览器内联预览源码",
+          "内嵌网页面板看文档、查资料",
+          "左侧导航与右侧面板实时联动",
+        ],
+      },
+      {
+        title: "接入 MCP，安全先行",
+        desc: "把外部 MCP 服务器接进同一套工具链：工具发现、同名冲突自动改名、按工作区限定可见；所有调用走审批与统一规则，而不是只在提示词里讲安全。",
+        bullets: [
+          "MCP 服务器增删改查与连接状态、重连",
+          "工具默认仅执行模式可见，调用需审批",
+          "安全事件可查、可导出",
         ],
       },
     ],
@@ -160,7 +178,7 @@ export const zh = {
     releases: "Releases",
     readme: "README",
     license: "Apache 2.0 许可",
-    note: "文档目前以中文维护",
+    note: "文档支持简体中文、繁體中文、English、日本語、Español、Português",
   },
   quote: {
     sub: "界面做减法，逻辑做加法。",
@@ -179,6 +197,7 @@ export const zh = {
       "官方市场一键安装，安装包强制校验 sha256",
       "装前静态审查：权限、高危命令、提示词注入逐项列出",
       "可添加任意 GitHub 仓库作为技能来源",
+      "官方源下载走内置镜像竞速，国内也能稳定安装",
     ],
     panelTitle: "Skills",
     builtin: "内置",

@@ -93,9 +93,9 @@ function MockEdit({ t }: { t: Dictionary }) {
 function MockRust({ t }: { t: Dictionary }) {
   const lines: Array<{ text: string; tone: "cmd" | "ok" | "plain" }> = [
     { text: "$ cargo test", tone: "cmd" },
-    { text: "test result: ok. 322 passed; 0 failed", tone: "plain" },
+    { text: "test result: ok. 537 passed; 0 failed", tone: "plain" },
     { text: "$ pnpm test", tone: "cmd" },
-    { text: "171 tests passed", tone: "plain" },
+    { text: "739 tests passed", tone: "plain" },
     { text: t.features.testNote, tone: "ok" },
   ];
   return (
@@ -222,7 +222,90 @@ const MOCKS: Array<(t: Dictionary) => React.ReactNode> = [
   (t) => <MockEdit t={t} />,
   (t) => <MockRust t={t} />,
   (t) => <MockModels t={t} />,
+  () => <MockSidebar />,
+  () => <MockMcp />,
 ];
+
+/** 4 · 侧边栏：左侧导航 + 右侧文件 / 网页面板（实时联动） */
+function MockSidebar() {
+  const nav = [
+    { label: "文件", active: true },
+    { label: "网页", active: false },
+    { label: "Skills", active: false },
+  ];
+  return (
+    <Frame>
+      <div className="flex gap-3">
+        <div className="flex w-1/3 flex-col gap-1.5">
+          {nav.map((n) => (
+            <div
+              key={n.label}
+              className={`flex items-center gap-1.5 rounded-tag px-2 py-1.5 text-xs ${
+                n.active
+                  ? "bg-bubble font-medium text-foreground"
+                  : "text-subtle"
+              }`}
+            >
+              <span
+                className={`h-1.5 w-1.5 rounded-full ${
+                  n.active ? "bg-brand" : "bg-line"
+                }`}
+              />
+              {n.label}
+            </div>
+          ))}
+        </div>
+        <div className="flex-1 rounded-tag border border-line bg-surface-sunken p-2.5">
+          <div className="space-y-1 font-mono text-[11px] text-subtle">
+            <div>src/lib/search.rs</div>
+            <div>src/components/SearchBar.tsx</div>
+            <div>README.md</div>
+          </div>
+        </div>
+      </div>
+    </Frame>
+  );
+}
+
+/** 6 · MCP：服务器状态 + 工具清单 + 审批徽标 */
+function MockMcp() {
+  const servers = [
+    { name: "filesystem", running: true, tools: 4 },
+    { name: "github", running: false, tools: 2 },
+  ];
+  return (
+    <Frame>
+      <div className="space-y-2">
+        {servers.map((s) => (
+          <div
+            key={s.name}
+            className="flex items-center gap-2 rounded-tag border border-line bg-surface px-2.5 py-2"
+          >
+            <span
+              className={`h-2 w-2 shrink-0 rounded-full ${
+                s.running ? "bg-success" : "bg-danger"
+              }`}
+            />
+            <span className="min-w-0 flex-1 truncate font-mono text-[11px] text-foreground">
+              {s.name}
+            </span>
+            <span className="shrink-0 text-[10px] text-subtle">
+              {s.tools} tools
+            </span>
+          </div>
+        ))}
+        <div className="flex items-center gap-2 rounded-tag border border-warning/40 bg-warning/10 px-2.5 py-2">
+          <span className="rounded-full border border-warning/40 px-1.5 py-0.5 text-[9px] text-warning">
+            需审批
+          </span>
+          <span className="min-w-0 flex-1 truncate font-mono text-[11px] text-foreground">
+            mcp_filesystem_read_file
+          </span>
+        </div>
+      </div>
+    </Frame>
+  );
+}
 
 export default function FeatureGrid() {
   const { t } = useI18n();

@@ -97,7 +97,7 @@ export default function AppWindow() {
           <span className="text-[13px] font-semibold tracking-[-0.02em] text-foreground">
             Aura
           </span>
-          <span className="font-mono text-[11px] text-subtle">v0.6.1</span>
+          <span className="font-mono text-[11px] text-subtle">v0.8.0-rc.2</span>
         </div>
         <div aria-hidden="true" className="flex h-full">
           <span className="flex h-full w-11 items-center justify-center text-subtle transition-colors hover:bg-bubble hover:text-foreground">

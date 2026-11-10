@@ -19,7 +19,7 @@ export const en: Dictionary = {
     downloadHint: "Get the latest installer for Windows",
     github: "GitHub",
     githubHint: "Browse the source repository",
-    techNote: "Native Windows · Tauri 2 · Rust · auto updates",
+    techNote: "Native Windows / Linux · Tauri 2 · Rust · auto updates",
   },
   trust: {
     items: [
@@ -103,8 +103,8 @@ export const en: Dictionary = {
         title: "Pure Rust, small and fast",
         desc: "All core logic runs in Rust; the frontend is a thin UI layer backed by hundreds of tests guarding the boundaries.",
         bullets: [
-          "322 Rust test cases",
-          "171 frontend test cases",
+          "537 Rust test cases",
+          "739 frontend test cases",
           "Build only needs the local toolchain",
         ],
       },
@@ -115,6 +115,24 @@ export const en: Dictionary = {
           "Presets and custom Base URLs",
           "Pin favorite models per provider",
           "Keys stay local, uploaded to no one",
+        ],
+      },
+      {
+        title: "Look things up without leaving",
+        desc: "A built-in sidebar previews source inline, and an embedded web panel keeps docs at hand — no switching apps. The left nav drives the right panel, so context stays where you are.",
+        bullets: [
+          "Inline source preview in the file browser",
+          "Embedded web panel for docs and lookup",
+          "Left nav drives the right panel in real time",
+        ],
+      },
+      {
+        title: "MCP tools with guardrails",
+        desc: "Bring external MCP servers into the same toolchain: discovery, automatic renaming on conflicts, workspace scoping. Every call goes through approval and shared rules instead of prompt-only security.",
+        bullets: [
+          "Server CRUD, status and reconnect",
+          "Tools are Build-mode only and require approval",
+          "Security events can be reviewed and exported",
         ],
       },
     ],
@@ -172,7 +190,7 @@ export const en: Dictionary = {
     releases: "Releases",
     readme: "README",
     license: "Apache 2.0 License",
-    note: "Documentation is maintained in Chinese",
+    note: "Docs available in 简体中文, 繁體中文, English, 日本語, Español, Português",
   },
   quote: {
     sub: "A small surface with a strong core.",
@@ -192,6 +210,7 @@ export const en: Dictionary = {
       "One-click install from the official marketplace, sha256 enforced",
       "Static review before install: permissions, risky commands, prompt injection",
       "Add any GitHub repo as an extra skill source",
+      "Official sources race built-in mirrors for reliable installs",
     ],
     panelTitle: "Skills",
     builtin: "Built-in",
